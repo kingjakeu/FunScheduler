@@ -132,9 +132,10 @@ int main(int argc, char *argv[]) {
     queue = (Queue*)malloc(sizeof(Queue));
     pid_t pid;
     //create process
+    int i, j;
     char arg[2] = {'A', '\0'};
-    for(int i = 0; i < 5; i++){
-        for(int j=0; j<processNum[i]; j++){
+    for(i = 0; i < 5; i++){
+        for(j=0; j<processNum[i]; j++){
             pid = fork();
             sleep(1);
             
