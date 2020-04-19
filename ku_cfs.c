@@ -111,12 +111,12 @@ void handler(int sig){
 }
 
 int main(int argc, char *argv[]) {
-   
+    int i, j;
     int processNum[5];
     timeSlice = atoi(argv[6]); //the number of timeslice
 
     //allocate values
-    for (int i = 0; i < 5; i++) {
+    for (i = 0; i < 5; i++) {
       processNum[i] = atoi(argv[i+1]);
     }
 
@@ -132,7 +132,7 @@ int main(int argc, char *argv[]) {
     queue = (Queue*)malloc(sizeof(Queue));
     pid_t pid;
     //create process
-    int i, j;
+  
     char arg[2] = {'A', '\0'};
     for(i = 0; i < 5; i++){
         for(j=0; j<processNum[i]; j++){
