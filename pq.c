@@ -1,6 +1,11 @@
 #include <stdio.h>
+#include <signal.h>
+#include <sys/time.h>
+#include <unistd.h>
 #include <stdlib.h>
+#define TIMESLICE 1000
 
+int counter = 0;
 typedef struct Node {
     int pid;
     char letter;
@@ -60,18 +65,35 @@ Node* deQueue(Queue *q) {
     return tempNode;
 }
 
+void func(int sig){
+    printf("timer alarm\n");
+    counter++;
+    if(counter == 3){
+        
+    }
+}
+
 int main(int argc, char *argv[]) {
-    Queue* que = (Queue *)malloc(sizeof(Queue));
-    int i = 0;
-    for(i=0; i<5; i++){
-        enQueue(que, initNode(i, 65+i, 5-i));
+    struct itimerval it_val;
+    it_val.it_value.tv_sec = TIMESLICE/1000;
+    it_val.it_value.tv_usec = (TIMESLICE*1000) %1000000;
+    it_val.it_interval = it_val.it_value;
+    
+    //signal handler
+    struct sigaction sa;
+    sa.sa_handler = DoStuff;
+    sigemptyset(&sa.sa_mask);
+    sa.sa_flags = 0;
+    
+    //timer set
+    if(setitimer(ITIMER_REAL, &it_val, NULL) ==-1){
+        perror("error calling setitimer()");
+        exit(1);
     }
     
-    for(i=0; i<10; i++){
-        Node *node = deQueue(que);
-        node->vruntime += 2;
-        enQueue(que, node);
-    }
+    signal(SIGALRM, func);
     
-    return -1;
+    while(1);
+    
+    return 0;
 }
